@@ -1,2 +1,5 @@
-math = (2 + 2)
-print("2 + 2 =", math)
+math = (1 + 2)
+moreMath = (1 * 2)
+
+print("1 + 2 =", math)
+print("1 * 2 =", moreMath)
