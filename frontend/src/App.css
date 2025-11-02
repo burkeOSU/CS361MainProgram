@@ -1,0 +1,200 @@
+body {
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  color: black;
+  min-height: 100vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  margin: 0;
+  background-image: url("/public/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  border: 5px solid black;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.content {
+  margin: 2rem auto;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+
+}
+
+main {
+  flex: 1;
+}
+
+header,
+footer {
+  background-color: rgba(209, 202, 187, 0.6);
+  text-align: center;
+}
+
+h1 {
+  color: black;
+  margin: 0;
+}
+
+h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  margin-bottom: 0.5rem;
+  margin-top: 0rem;
+}
+
+nav a {
+  display: block;
+}
+
+p {
+  margin-left: 0.5rem;
+  margin-bottom: 0rem;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-links a,
+.PageTitle {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 2px solid #595959;
+  border-radius: 0px 0px 12px 12px;
+  background: #d1cabb;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.sub-header-container {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 2px solid #595959;
+  border-radius: 12px;
+  background: #d1cabb;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.p-container {
+  border: 2px solid #553724;
+  border-radius: 12px;
+  color: black;
+  padding-bottom: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+  background: #fff6e4;
+}
+
+.inline {
+  display: inline-block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 12px;
+  border: 1.5px solid #553724;
+  /* background-color: #d1cabb; */
+  text-align: left;
+  color: black;
+}
+
+table tbody {
+  padding: 12px;
+  text-align: left;
+}
+
+.InputDate {
+  font-size: large;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.InputText {
+  width: 100%;
+  height: 5rem;
+  font-size: large;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.DateBox {
+  background-color: #d1cabb;
+  font-weight: bold;
+}
+
+.ButtonBox {
+  background-color: #e4dfd5;
+  font-weight: bold;
+}
+
+.TextBox {
+  background-color: #fff6e4;
+  max-width: 800px;
+}
+
+.TextBox pre {
+  font-size: large;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+input,
+select {
+  margin-left: 0.5em;
+  padding: 0.25em;
+  width: 80%;
+  font-family: inherit;
+  color: #565656;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button,
+.button {
+  border: 2px solid #553724;
+  padding: 0.5em 1em;
+  font-weight: bold;
+  color: black;
+  font-size: 1em;
+  font-family: inherit;
+  background-color: #f9cb9c;
+  transition: border-color 0.25s;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+footer {
+  margin-top: 2em;
+  font-size: 0.9em;
+  color: #333333
+}
