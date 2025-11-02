@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "public/assets/",
+    "data/*.json",
+    "users/*.json"
+  ]
+}
