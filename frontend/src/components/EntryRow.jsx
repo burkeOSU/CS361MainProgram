@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function EntryRow({ entry }) {
+function EntryRow({ entry, onDelete }) {
     return (
         <>
             <tr>
@@ -11,6 +11,9 @@ function EntryRow({ entry }) {
             </tr><tr>
                 <td className="TextBox" colSpan="2"><pre>{entry.text}</pre></td>
             </tr><tr>
+            </tr>
+            <button className="button" style={{ marginRight: "1.5rem" }} onClick={() => onDelete(entry.id)}>Delete</button>
+            <tr>
                 <td colSpan="2" style={{ background: "transparent", border: "none" }}></td>
             </tr>
         </>

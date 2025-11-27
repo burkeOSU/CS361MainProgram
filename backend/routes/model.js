@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, unlink } from 'node:fs/promises';
 import fs from "node:fs";
 import { randomUUID } from 'node:crypto';
 
@@ -13,7 +13,7 @@ async function createEntry(user, data) {
     const fileName = (`${userPath}/${id}.json`);
     data.id = id;
     await writeFile(fileName, JSON.stringify(data));
-    return getEntryWithId(id);
+    return getEntryWithId(user, id);
 }
 
 async function getEntries(user) {
@@ -49,10 +49,26 @@ async function userLogin(user, pass) {
     }
 }
 
+async function deleteEntry(user, id) {
+    const userPath = `./data/${user}`;
+    const fileName = `${userPath}/${id}.json`;
+
+    try {
+        await unlink(fileName);
+        return true;
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            return false;
+        }
+        throw err;
+    }
+}
+
 export {
     isDateValid,
     createEntry,
     getEntries,
     getEntryWithId,
-    userLogin
+    userLogin,
+    deleteEntry
 };

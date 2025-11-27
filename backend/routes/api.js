@@ -57,4 +57,20 @@ router.get('/entries/:id', async (req, res) => {
     }
 });
 
+router.delete('/entries/:id', async (req, res) => {
+    const { id } = req.params;
+    const { user } = req.query;
+
+    try {
+        const deleted = await entries.deleteEntry(user, id);
+        if (deleted) {
+            res.status(200).json({ message: 'Entry deleted' });
+        } else {
+            res.status(404).json({ error: 'Entry not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 export default router;
