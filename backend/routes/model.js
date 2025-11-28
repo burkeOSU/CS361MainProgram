@@ -1,6 +1,34 @@
 import { readdir, readFile, writeFile, unlink } from 'node:fs/promises';
 import fs from "node:fs";
 import { randomUUID } from 'node:crypto';
+//https://nodejs.org/api/child_process.html#child_processexeccommand-options-callback
+import { exec } from "child_process";
+
+function getDateTime() {
+    return new Promise((resolve, reject) => {
+        exec("python ./microservices/getdatetime/datetime-client.py", (err, stdout, stderr) => {
+            if (err) {
+                reject("Microservice error: " + stderr);
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
+}
+
+function moodTag(user, entryId, mood) {
+    return new Promise((resolve, reject) => {
+        // Pass values through environment variables
+        const env = { ...process.env, moodUser: user, moodEntryId: entryId, moodMood: mood };
+        exec("python ./microservices/moodtag/moodtag-client.py", { env }, (err, stdout, stderr) => {
+            if (err) {
+                reject("Microservice error: " + stderr);
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
+}
 
 function isDateValid(date) {
     const format = /^\d\d-\d\d-\d\d\d\d$/;
@@ -11,8 +39,10 @@ async function createEntry(user, data) {
     const id = randomUUID();
     const userPath = `./data/${user}`;
     const fileName = (`${userPath}/${id}.json`);
-    data.id = id;
-    await writeFile(fileName, JSON.stringify(data));
+    const dateTime = await getDateTime();
+    const entry = { id: id, date: dateTime, text: data.text, mood: data.mood };
+    await writeFile(fileName, JSON.stringify(entry));
+    await moodTag(user, id, entry.mood);
     return getEntryWithId(user, id);
 }
 
@@ -21,7 +51,7 @@ async function getEntries(user) {
     const files = await readdir(userPath);
     return files.map((fileName) => {
         const entry = JSON.parse(fs.readFileSync(`${userPath}/${fileName}`));
-        return { id: entry.id, date: entry.date, text: entry.text.substring(0, 400) };
+        return { id: entry.id, date: entry.date, text: entry.text.substring(0, 400), mood: entry.mood };
     }).sort((a, b) => b.date.localeCompare(a.date));
 }
 
@@ -68,13 +98,21 @@ async function editEntry(user, id, data) {
     const userPath = `./data/${user}`;
     const fileName = (`${userPath}/${id}.json`);
     try {
-        const updatedEntry = {id, date: data.date, text: data.text};
+        const oldEntry = JSON.parse(await readFile(fileName));
+
+        const updatedEntry = {id, date: oldEntry.date, text: data.text, mood: data.mood || oldEntry.mood};
         await writeFile(fileName, JSON.stringify(updatedEntry));
+        await moodTag(user, id, updatedEntry.mood)
         return updatedEntry;
     } catch (err) {
         console.error(err);
         return undefined;
     }
+}
+
+async function getEntryWithMood(user, mood) {
+    const all = await getEntries(user);
+    return all.filter(entry => entry.mood === mood);
 }
 
 export {
@@ -84,5 +122,8 @@ export {
     getEntryWithId,
     userLogin,
     deleteEntry,
-    editEntry
+    editEntry,
+    getDateTime,
+    moodTag,
+    getEntryWithMood
 };

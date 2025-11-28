@@ -5,6 +5,10 @@ function EntryRow({ entry, onDelete }) {
         <>
             <tr>
                 <td className="DateBox">{entry.date}</td>
+                <td className="MoodBox">
+                    <Link to={`/filter/${entry.mood}`}
+                    style={{ textDecoration: "none", color: "inherit" }}>
+                    Mood: {entry.mood}</Link></td>
                 <td className="ButtonBox">
                     <Link to={`/view/${entry.id}`} title="View" style={{ color: "inherit", textDecoration: "none" }} >View Entry</Link>
                 </td>

@@ -46,6 +46,7 @@ function HomePage() {
             <PageTitle title="Entry History" user="ty" />
             <div className="p-container content">
                 <p>To create a new entry, click the “Create” button</p>
+                <p>Click on an entry's mood, such as "Mood: happy", to filter all entries by a selected mood.</p>
                 <p>To view a previous entry, click the “View entry” button next to the entry you wish to view.</p>
                 <p>If you have any questions, click the “Contact us” button.</p>
             </div>

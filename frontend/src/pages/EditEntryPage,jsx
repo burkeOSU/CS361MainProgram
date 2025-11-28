@@ -6,6 +6,7 @@ function EditEntryPage() {
     const { id } = useParams();
     const [date, setDate] = useState('');
     const [text, setText] = useState('');
+    const [mood, setMood] = useState('');
 
     const user = JSON.parse(document.cookie);
 
@@ -19,6 +20,7 @@ function EditEntryPage() {
                 const entry = await response.json();
                 setDate(entry.date);
                 setText(entry.text);
+                setMood(entry.mood);
             } else if (response.status === 404) {
                 alert('ERROR: Entry not found.');
                 navigate('/history');
@@ -49,10 +51,8 @@ function EditEntryPage() {
         let SubmitConfirmed = window.confirm('Are you ready to submit your changes to this entry? Click "OK" or "Cancel".');
         if (SubmitConfirmed) {
 
-            const updatedEntry = {
-                date,
-                text
-            };
+            // Date is not updated at edit, mood can be updated
+            const updatedEntry = { text, mood };
 
             try {
                 const response = await fetch(`http://localhost:3000/api/entries/${id}?user=${user.user}`, {
@@ -78,7 +78,7 @@ function EditEntryPage() {
             <PageTitle title="Edit Entry" onClick={handleClick} />
             <div className="content">
                 <div className="p-container content">
-                    <p>Select a different valid date and/or edit the text in the text box.</p>
+                    <p>Edit the text in the text box.</p>
                     <p>To undo typed text, select “Ctrl+Z” on your keyboard. <br></br>To redo typed text, select “Ctrl+Y” on your keyboard.</p>
                     <p>When you are ready to submit the changes your entry, click the “Submit” button.</p>
                 </div>
@@ -86,7 +86,19 @@ function EditEntryPage() {
                     <table>
                         <tbody>
                             <tr>
-                                <td style={{ border: "none" }}><input className="InputDate DateBox" value={date} onChange={e => setDate(e.target.value)} placeholder="Input date here... (MM-DD-YYYY)" required /></td>
+                                <td style={{ border: "none" }}><input className="InputDate DateBox" value={date} readOnly /></td>
+                            </tr>
+                            <tr>
+                                {/* Mood tag dropdown */}
+                                <td style={{ border: "none" }}>
+                                    <select value={mood} onChange={e => setMood(e.target.value)}>
+                                        <option value="none">none</option>
+                                        <option value="happy">happy</option>
+                                        <option value="neutral">neutral</option>
+                                        <option value="sad">sad</option>
+                                        <option value="angry">angry</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td style={{ background: "transparent", border: "none" }}><textarea className="TextBox InputText" value={text} onChange={e => setText(e.target.value)} placeholder="Input text here..." required /></td>

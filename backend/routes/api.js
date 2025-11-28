@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
 
 function isEntryValid(body) {
     const keys = Object.keys(body);
-    const requiredKeys = ['date', 'text'];
+    const requiredKeys = ['text'];
 
     let allKeysPresent = true;
     for (const requiredKey of requiredKeys) {
@@ -24,12 +24,16 @@ function isEntryValid(body) {
         }
     }
 
-    if (keys.length !== 2 || !allKeysPresent) return false;
+    if (keys.length < 1 || keys.length > 2 || !allKeysPresent) return false;
 
-    const { date, text } = body;
+    const { text, mood } = body;
 
-    if (!entries.isDateValid(date)) return false;
     if (typeof text !== 'string' || text.trim().length === 0) return false;
+
+    if (keys.includes('mood')) {
+        const validMoods = ['none', 'happy', 'neutral', 'sad', 'angry'];
+        if (!validMoods.includes(mood)) return false;
+    }
 
     return true;
 }
@@ -46,6 +50,12 @@ router.post('/entries', async (req, res) => {
 router.get('/entries', async (req, res) => {
     const found = await entries.getEntries(req.query.user);
     res.status(200).json(found);
+});
+
+router.get('/entries/filter', async (req, res) => {
+    const { user, mood } = req.query;
+    const foundMood = await entries.getEntryWithMood(user, mood);
+    res.status(200).json(foundMood);
 });
 
 router.get('/entries/:id', async (req, res) => {

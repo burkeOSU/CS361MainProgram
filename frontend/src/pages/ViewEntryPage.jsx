@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-function EditEntryPage() {
+function ViewEntryPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [date, setDate] = useState('');
@@ -60,4 +60,4 @@ function EditEntryPage() {
     );
 }
 
-export default EditEntryPage;
+export default ViewEntryPage;

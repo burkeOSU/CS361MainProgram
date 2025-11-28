@@ -6,6 +6,7 @@ import ViewEntryPage from './pages/ViewEntryPage';
 import EditEntryPage from './pages/EditEntryPage';
 import ContactUsPage from './pages/ContactUsPage';
 import LoginPage from './pages/LoginPage';
+import MoodTagFilterPage from './pages/MoodTagFilterPage';
 import './App.css'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
               <Route path="/edit/:id" element={<EditEntryPage />} />
               <Route path="/contact" element={<ContactUsPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/filter/:mood" element={<MoodTagFilterPage />} />
             </Routes>
           </main>
         </div>

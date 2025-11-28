@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function CreateEntryPage() {
-    const [date, setDate] = useState('');
     const [text, setText] = useState('');
+    const [mood, setMood] = useState('none');
 
     const user = JSON.parse(document.cookie);
 
@@ -23,10 +23,9 @@ function CreateEntryPage() {
         let SubmitConfirmed = window.confirm('Are you ready to submit your entry? Click "OK" or "Cancel".');
         if (SubmitConfirmed) {
 
-            const newEntry = {
-                date,
-                text
-            };
+            // Entry uses Get Date/Time microservice, does not add date manually
+            // Entry uses mood tag 
+            const newEntry = {text, mood};
 
             try {
                 const response = await fetch(`http://localhost:3000/api/entries?user=${user.user}`, {
@@ -53,7 +52,7 @@ function CreateEntryPage() {
             <PageTitle title="Create Entry" onClick={handleClick} />
             <div className="content">
                 <div className="p-container content">
-                    <p>Select a valid date and enter text in the text box.</p>
+                    <p>Enter text in the text box.</p>
                     <p>To undo typed text, select “Ctrl+Z” on your keyboard. <br></br>To redo typed text, select “Ctrl+Y” on your keyboard.</p>
                     <p>When you are ready to submit your entry, click the “Submit” button.</p>
                 </div>
@@ -61,7 +60,16 @@ function CreateEntryPage() {
                     <table>
                         <tbody>
                             <tr>
-                                <td style={{ border: "none" }}><input className="InputDate DateBox" value={date} onChange={e => setDate(e.target.value)} placeholder="Input date here... (MM-DD-YYYY)" required /></td>
+                                {/* Mood tag dropdown */}
+                                <td style={{ border: "none" }}>
+                                    <select value={mood} onChange={e => setMood(e.target.value)}>
+                                        <option value="none">none</option>
+                                        <option value="happy">happy</option>
+                                        <option value="neutral">neutral</option>
+                                        <option value="sad">sad</option>
+                                        <option value="angry">angry</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td style={{ background: "transparent", border: "none" }}><textarea className="TextBox InputText" value={text} onChange={e => setText(e.target.value)} placeholder="Input text here..." required /></td>
