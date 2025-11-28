@@ -73,4 +73,18 @@ router.delete('/entries/:id', async (req, res) => {
     }
 });
 
+router.put('/entries/:id', async (req, res) => {
+    const { id } = req.params;
+    const { user } = req.query;
+
+    if (!isEntryValid(req.body)) {
+    res.status(400).json({ Error: "Invalid request" });
+    }
+    const updated = await entries.editEntry(user, id, req.body);
+    if (!updated) {
+        return res.status(404).json({ error: 'Entry not found' });
+    }
+    res.status(200).json(updated);
+});
+
 export default router;

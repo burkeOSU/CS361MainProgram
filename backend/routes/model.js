@@ -64,11 +64,25 @@ async function deleteEntry(user, id) {
     }
 }
 
+async function editEntry(user, id, data) {
+    const userPath = `./data/${user}`;
+    const fileName = (`${userPath}/${id}.json`);
+    try {
+        const updatedEntry = {id, date: data.date, text: data.text};
+        await writeFile(fileName, JSON.stringify(updatedEntry));
+        return updatedEntry;
+    } catch (err) {
+        console.error(err);
+        return undefined;
+    }
+}
+
 export {
     isDateValid,
     createEntry,
     getEntries,
     getEntryWithId,
     userLogin,
-    deleteEntry
+    deleteEntry,
+    editEntry
 };
