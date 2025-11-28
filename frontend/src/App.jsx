@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import EntryHistoryPage from './pages/EntryHistoryPage';
 import CreateEntryPage from './pages/CreateEntryPage';
 import ViewEntryPage from './pages/ViewEntryPage';
@@ -15,6 +15,7 @@ function App() {
         <div className="container">
           <main>
             <Routes>
+              <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/history" element={<EntryHistoryPage />} />
               <Route path="/create" element={<CreateEntryPage />} />
               <Route path="/view/:id" element={<ViewEntryPage />} />
