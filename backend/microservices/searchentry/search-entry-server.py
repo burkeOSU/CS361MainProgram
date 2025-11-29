@@ -8,11 +8,11 @@ searchFolder = "searchFolder"
 
 
 def folderSearchTerm(keyword, searchFolder):
-    # List to store names of files containing keyword
+    # list to store names of files containing keyword
     foundFiles = []
 
     # navigate into folder
-    # search file contents for keyword (use a for loop)
+    # search file contents for keyword
     for file in os.listdir(searchFolder):
         filePath = os.path.join(searchFolder, file)
         with open(filePath) as f:
@@ -22,16 +22,18 @@ def folderSearchTerm(keyword, searchFolder):
 
     return foundFiles
 
+
 def folderSearchJson(keyword, searchFolder):
-    # List to store names of files containing keyword
+    # list to store names of files containing keyword
     foundFiles = []
 
     # navigate into folder
-    # search file contents for keyword (use a for loop)
+    # search file contents for keyword
     for file in os.listdir(searchFolder):
         filePath = os.path.join(searchFolder, file)
         with open(filePath) as f:
             entry = json.load(f)
+            # convert all words to lowercase
             text = entry.get("text", "").lower()
             if keyword.lower() in text:
                 # if keyword is found, append list
@@ -48,9 +50,9 @@ def main():
     socket.bind("tcp://*:5524")
 
     while True:
-        #  Waits for message from client
+        # waits for message from client
         receivedClient = socket.recv_string()
-        print(f"{receivedClient}")
+        print(receivedClient)
 
         client = json.loads(receivedClient)
 
@@ -59,22 +61,22 @@ def main():
         keyword = client.get("keyword")
         folderPath = client.get("filePath")
 
-        # microservice -> backend, join with data/user
+        # build filepath to search folder relative to server file
         searchFolder = os.path.join("..", "..", folderPath)
 
-        if (mode == "terminal"):
+        if mode == "terminal":
             searchResults = folderSearchTerm(keyword, searchFolder)
-        elif (mode == "json"):
+        elif mode == "json":
             searchResults = folderSearchJson(keyword, searchFolder)
         else:
             print(f"Error: Mode parameter not json or terminal.")
 
-        #  Pause
+        # pause
         time.sleep(1)
 
         sentMessage = f"{searchResults}"
 
-        #  Sends reply back to client
+        # send response to client
         socket.send_string(sentMessage)
         print(f"Sent {sentMessage} message back to client.")
 

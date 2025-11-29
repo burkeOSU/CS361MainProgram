@@ -2,27 +2,139 @@ import time
 import zmq
 import os
 import json
-# https://www.geeksforgeeks.org/python/python-program-to-count-words-in-a-sentence/#
-# https://docs.python.org/3/library/re.html
 import re
-# https://docs.python.org/3/library/collections.html#collections.Counter
 from collections import Counter
 
-# https://gist.github.com/sebleier/554280
-# Stopword list to filter out (e.g. the, a, it, is)
-stopwords = {"i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your",
-             "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers",
-             "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what",
-             "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are",
-             "was", "were", "be", "been", "being", "have", "has", "had", "having", "do",
-             "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or",
-             "because", "as", "until", "while", "of", "at", "by", "for", "with", "about",
-             "against", "between", "into", "through", "during", "before", "after", "above", "below", "to",
-             "from", "up", "down", "in", "out", "on", "off", "over", "under", "again",
-             "further", "then", "once", "here", "there", "when", "where", "why", "how", "all",
-             "any", "both", "each", "few", "more", "most", "other", "some", "such", "no",
-             "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s",
-             "t", "can", "will", "just", "don", "should", "now"}
+# dictionary of stopwords to filter out (e.g. the, a, it, is)
+stopwords = {
+    "i",
+    "me",
+    "my",
+    "myself",
+    "we",
+    "our",
+    "ours",
+    "ourselves",
+    "you",
+    "your",
+    "yours",
+    "yourself",
+    "yourselves",
+    "he",
+    "him",
+    "his",
+    "himself",
+    "she",
+    "her",
+    "hers",
+    "herself",
+    "it",
+    "its",
+    "itself",
+    "they",
+    "them",
+    "their",
+    "theirs",
+    "themselves",
+    "what",
+    "which",
+    "who",
+    "whom",
+    "this",
+    "that",
+    "these",
+    "those",
+    "am",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "have",
+    "has",
+    "had",
+    "having",
+    "do",
+    "does",
+    "did",
+    "doing",
+    "a",
+    "an",
+    "the",
+    "and",
+    "but",
+    "if",
+    "or",
+    "because",
+    "as",
+    "until",
+    "while",
+    "of",
+    "at",
+    "by",
+    "for",
+    "with",
+    "about",
+    "against",
+    "between",
+    "into",
+    "through",
+    "during",
+    "before",
+    "after",
+    "above",
+    "below",
+    "to",
+    "from",
+    "up",
+    "down",
+    "in",
+    "out",
+    "on",
+    "off",
+    "over",
+    "under",
+    "again",
+    "further",
+    "then",
+    "once",
+    "here",
+    "there",
+    "when",
+    "where",
+    "why",
+    "how",
+    "all",
+    "any",
+    "both",
+    "each",
+    "few",
+    "more",
+    "most",
+    "other",
+    "some",
+    "such",
+    "no",
+    "nor",
+    "not",
+    "only",
+    "own",
+    "same",
+    "so",
+    "than",
+    "too",
+    "very",
+    "s",
+    "t",
+    "can",
+    "will",
+    "just",
+    "don",
+    "should",
+    "now",
+}
 
 
 def wordCounter(folderPath):
@@ -39,14 +151,14 @@ def wordCounter(folderPath):
 
             # r'[a-zA-Z]+' = Match upper and lower case, one or more characters in a row
             # NO numbers or punctuation!
-            words = re.findall(r'[a-zA-Z]+', text)
+            words = re.findall(r"[a-zA-Z]+", text)
 
             # filter out stopwords
             filteredWords = [i for i in words if i not in stopwords]
 
             wordCount.update(filteredWords)
 
-    # Top 10 most frequent words
+    # top 10 most frequent words
     return wordCount.most_common(10)
 
 
@@ -58,24 +170,25 @@ def main():
     socket.bind("tcp://*:5560")
 
     while True:
-        #  Waits for message from client
+        # waits for message from client
         receivedClient = socket.recv_string()
-        print(f"{receivedClient}")
+        print(receivedClient)
 
         client = json.loads(receivedClient)
 
         # receive parameters
         folderPath = client.get("filePath")
 
+        # build filepath to search folder relative to server file
         rankFolder = os.path.join("..", "..", folderPath)
         wordRank = wordCounter(rankFolder)
 
-        #  Pause
+        # pause
         time.sleep(1)
 
         sentMessage = json.dumps(wordRank)
 
-        #  Sends reply back to client
+        # send response to client
         socket.send_string(sentMessage)
         print(sentMessage)
 
