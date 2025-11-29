@@ -8,6 +8,7 @@ import ContactUsPage from './pages/ContactUsPage';
 import LoginPage from './pages/LoginPage';
 import MoodTagFilterPage from './pages/MoodTagFilterPage';
 import SearchKeywordPage from './pages/SearchKeywordPage';
+import WordRankingPage from './pages/WordRankingPage';
 import './App.css'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/filter/:mood" element={<MoodTagFilterPage />} />
               <Route path="/search/:keyword" element={<SearchKeywordPage />} />
+              <Route path="/ranking" element={<WordRankingPage />} />
             </Routes>
           </main>
         </div>

@@ -44,6 +44,19 @@ function keywordSearch(user, keyword) {
     });
 }
 
+function wordRank(user) {
+    return new Promise((resolve, reject) => {
+        const env = { ...process.env, rankUser: user };
+        exec("python ./microservices/wordrank/wordrank-client.py", { env }, (err, stdout, stderr) => {
+            if (err) {
+                reject("Microservice error: " + stderr);
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
+}
+
 function isDateValid(date) {
     const format = /^\d\d-\d\d-\d\d\d\d$/;
     return format.test(date);
@@ -140,5 +153,6 @@ export {
     getDateTime,
     moodTag,
     getEntryWithMood,
-    keywordSearch
+    keywordSearch,
+    wordRank
 };

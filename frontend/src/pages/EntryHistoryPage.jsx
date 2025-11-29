@@ -71,6 +71,7 @@ function HomePage() {
                 <p>To create a new entry, click the “Create” button.</p>
                 <p>Click on an entry's mood, such as "Mood: happy", to filter all entries by a selected mood.</p>
                 <p>To view a previous entry, click the “View entry” button next to the entry you wish to view.</p>
+                <p>To view your top 10 most frequently written words, click the “Top 10 Words” button.</p>
                 <p>If you have any questions, click the “Contact us” button.</p>
             </div>
             <div className="content">

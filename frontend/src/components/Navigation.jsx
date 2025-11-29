@@ -16,6 +16,7 @@ function Navigation({ onClick }) {
         <nav className="nav-links">
             <Link to="/create" onClick={onClick}>Create</Link>
             <Link to="/history" onClick={onClick}>History</Link>
+            <Link to="/ranking" onClick={onClick}>Top 10 Words</Link>
             <Link to="/contact" onClick={onClick}>Contact Us</Link>
 
             <a className="button" style={{ backgroundColor: "#f9cb9c" }} href="/logout" onClick={handleLogout}>Logout</a>

@@ -38,6 +38,12 @@ function ViewEntryPage() {
     return (
         <>
             <PageTitle title="View Entry" />
+            <div >
+                <Link className="button" to="/history">Go Back</Link>
+                <div className="p-container inline">
+                    <p>Click “Go Back” to return to the Entry History page.</p>
+                </div>
+            </div>
             <div className="content">
                 <table className="entry-table">
                     <tbody>
@@ -49,12 +55,6 @@ function ViewEntryPage() {
                     </tbody>
                 </table>
                 <br />
-                <div >
-                    <Link className="button" to="/history">Go Back</Link>
-                    <div className="p-container inline">
-                        <p>Click “Go Back” to return to the Entry History page.</p>
-                    </div>
-                </div>
             </div>
         </>
     );

@@ -74,6 +74,12 @@ router.get('/entries/search', async (req, res) => {
     return res.status(200).json(entryList);
 });
 
+router.get('/entries/ranking', async (req, res) => {
+        const result = await entries.wordRank(req.query.user);
+        const ranked = JSON.parse(result); 
+        res.status(200).json(ranked);
+});
+
 router.get('/entries/:id', async (req, res) => {
     const found = await entries.getEntryWithId(req.query.user, req.params.id);
     if (!found) {
