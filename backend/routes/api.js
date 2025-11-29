@@ -58,6 +58,22 @@ router.get('/entries/filter', async (req, res) => {
     res.status(200).json(foundMood);
 });
 
+router.get('/entries/search', async (req, res) => {
+    const { user, keyword } = req.query;
+
+    const foundKeyword = await entries.keywordSearch(user, keyword);
+    // (/'/g, '"') = search for every single quote in python list return, replace with double quotes (needed for JSON)
+    const filenames = JSON.parse(foundKeyword.replace(/'/g, '"'));
+
+    const entryList = [];
+    for (const file of filenames) {
+        const id = file.replace(".json", "");
+        const entry = await entries.getEntryWithId(user, id);
+        if (entry) entryList.push(entry);
+    }
+    return res.status(200).json(entryList);
+});
+
 router.get('/entries/:id', async (req, res) => {
     const found = await entries.getEntryWithId(req.query.user, req.params.id);
     if (!found) {
@@ -88,7 +104,7 @@ router.put('/entries/:id', async (req, res) => {
     const { user } = req.query;
 
     if (!isEntryValid(req.body)) {
-    res.status(400).json({ Error: "Invalid request" });
+        res.status(400).json({ Error: "Invalid request" });
     }
     const updated = await entries.editEntry(user, id, req.body);
     if (!updated) {

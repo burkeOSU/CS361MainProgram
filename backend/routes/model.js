@@ -30,6 +30,20 @@ function moodTag(user, entryId, mood) {
     });
 }
 
+function keywordSearch(user, keyword) {
+    return new Promise((resolve, reject) => {
+        // Pass values through environment variables
+        const env = { ...process.env, searchUser: user, searchKeyword: keyword };
+        exec("python ./microservices/searchentry/search-entry-client.py", { env }, (err, stdout, stderr) => {
+            if (err) {
+                reject("Microservice error: " + stderr);
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
+}
+
 function isDateValid(date) {
     const format = /^\d\d-\d\d-\d\d\d\d$/;
     return format.test(date);
@@ -125,5 +139,6 @@ export {
     editEntry,
     getDateTime,
     moodTag,
-    getEntryWithMood
+    getEntryWithMood,
+    keywordSearch
 };

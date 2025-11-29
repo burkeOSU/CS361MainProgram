@@ -1,11 +1,14 @@
 import PageTitle from "../components/PageTitle";
 import { useEffect, useState } from 'react';
 import EntryRow from '../components/EntryRow';
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
     const [entries, setEntries] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState("");
 
-    const user = JSON.parse(document.cookie); // assuming cookie really is JSON
+    const user = JSON.parse(document.cookie);
+    const navigate = useNavigate();
 
     const fetchEntries = async () => {
         try {
@@ -41,11 +44,31 @@ function HomePage() {
         }
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchKeyword.trim().length === 0) return;
+        navigate(`/search/${searchKeyword}`);
+    };
+
     return (
         <div>
             <PageTitle title="Entry History" user="ty" />
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} style={{ margin: "1rem 0" }}>
+                <input
+                    className="TextBox"
+                    placeholder="Search entries by keyword..."
+                    value={searchKeyword}
+                    onChange={e => setSearchKeyword(e.target.value)}
+                    required
+                />
+                <button type="submit" style={{ marginLeft: "0.5rem" }}>
+                    Search
+                </button>
+            </form>
             <div className="p-container content">
-                <p>To create a new entry, click the “Create” button</p>
+                <p>You can search entries by a specific word by entering a word into the search bar, and clicking "Search".</p>
+                <p>To create a new entry, click the “Create” button.</p>
                 <p>Click on an entry's mood, such as "Mood: happy", to filter all entries by a selected mood.</p>
                 <p>To view a previous entry, click the “View entry” button next to the entry you wish to view.</p>
                 <p>If you have any questions, click the “Contact us” button.</p>
