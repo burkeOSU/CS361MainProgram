@@ -5,7 +5,7 @@ import os
 
 
 def loadEntryMood(user, entryId):
-    path = os.path.join("data", user, f"{entryId}.json")
+    path = os.path.join("../../data", user, f"{entryId}.json")
 
     with open(path, "r") as f:
         return json.load(f), path
@@ -23,19 +23,16 @@ def moodTag(param):
         entryId = param.get("entry_id")
         # available moods: none (default), neutral, happy, sad, angry
         newMood = param.get("mood")
-
+        
         # load entry, get mood, save mood to entry
         entry, path = loadEntryMood(user, entryId)
-        oldMood = entry.get("mood")
         entry["mood"] = newMood
         saveEntryMood(path, entry)
-
         return json.dumps(
             {
                 "message": "Mood added to entry",
                 "entryId": entryId,
-                "oldMood": oldMood,
-                "mood": newMood,
+                "mood": newMood
             }
         )
 
