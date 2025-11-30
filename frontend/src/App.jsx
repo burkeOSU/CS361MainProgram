@@ -1,15 +1,19 @@
-
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import EntryHistoryPage from './pages/EntryHistoryPage';
-import CreateEntryPage from './pages/CreateEntryPage';
-import ViewEntryPage from './pages/ViewEntryPage';
-import EditEntryPage from './pages/EditEntryPage';
-import ContactUsPage from './pages/ContactUsPage';
-import LoginPage from './pages/LoginPage';
-import MoodTagFilterPage from './pages/MoodTagFilterPage';
-import SearchKeywordPage from './pages/SearchKeywordPage';
-import WordRankingPage from './pages/WordRankingPage';
-import './App.css'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import EntryHistoryPage from "./pages/EntryHistoryPage";
+import CreateEntryPage from "./pages/CreateEntryPage";
+import ViewEntryPage from "./pages/ViewEntryPage";
+import EditEntryPage from "./pages/EditEntryPage";
+import ContactUsPage from "./pages/ContactUsPage";
+import LoginPage from "./pages/LoginPage";
+import MoodTagFilterPage from "./pages/MoodTagFilterPage";
+import SearchKeywordPage from "./pages/SearchKeywordPage";
+import WordRankingPage from "./pages/WordRankingPage";
+import "./App.css";
 
 function App() {
   return (

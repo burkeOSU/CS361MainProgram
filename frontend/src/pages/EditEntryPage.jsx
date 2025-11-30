@@ -1,115 +1,146 @@
 import PageTitle from "../components/PageTitle";
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 function EditEntryPage() {
-    const { id } = useParams();
-    const [date, setDate] = useState('');
-    const [text, setText] = useState('');
-    const [mood, setMood] = useState('');
+  const { id } = useParams();
+  // Date set using microservice Get Date and Time
+  const [date, setDate] = useState("");
+  const [text, setText] = useState("");
+  const [mood, setMood] = useState("");
 
-    const user = JSON.parse(document.cookie);
+  // Parse user information using browser cookies
+  const user = JSON.parse(document.cookie);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
     const loadEntry = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/api/entries/${id}?user=${user.user}`);
-            if (response.status === 200) {
-                const entry = await response.json();
-                setDate(entry.date);
-                setText(entry.text);
-                setMood(entry.mood);
-            } else if (response.status === 404) {
-                alert('ERROR: Entry not found.');
-                navigate('/history');
-            } else {
-                alert(`ERROR: Unexpected error ${response.status}`);
-                navigate('/');
-            }
-        } catch (err) {
-            alert(`ERROR: There was a problem loading an entry: ${err.message}`);
-            navigate('/history')
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/entries/${id}?user=${user.user}`
+        );
+        if (response.status === 200) {
+          const entry = await response.json();
+          setDate(entry.date);
+          setText(entry.text);
+          setMood(entry.mood);
+        } else if (response.status === 404) {
+          alert("ERROR: Entry not found.");
+          navigate("/history");
+        } else {
+          alert(`ERROR: Unexpected error ${response.status}`);
+          navigate("/");
         }
+      } catch (err) {
+        alert(`ERROR: There was a problem loading an entry: ${err.message}`);
+        navigate("/history");
+      }
     };
 
     loadEntry();
-}, [id, navigate]);
+  }, [id, navigate]);
 
-
-    const handleClick = (event) => {
-        let LeaveConfirmed = window.confirm('Are you sure you want to leave this page? Clicking “OK” will undo changes made to this entry.');
-        if (LeaveConfirmed) {
-        } else {
-            event.preventDefault();
-        };
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        let SubmitConfirmed = window.confirm('Are you ready to submit your changes to this entry? Click "OK" or "Cancel".');
-        if (SubmitConfirmed) {
-
-            // Date is not updated at edit, mood can be updated
-            const updatedEntry = { text, mood };
-
-            try {
-                const response = await fetch(`http://localhost:3000/api/entries/${id}?user=${user.user}`, {
-                    method: 'PUT',
-                    body: JSON.stringify(updatedEntry),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (response.status === 200) {
-                    navigate('/history');
-                } else {
-                    alert(`ERROR: Failed to update entry! Status code: ${response.status}`);
-                }
-            } catch (err) {
-                alert(`ERROR: ${err.message}`);
-            }
-
-        }
-    }
-
-    return (
-        <>
-            <PageTitle title="Edit Entry" onClick={handleClick} />
-            <div className="content">
-                <div className="p-container content">
-                    <p>Edit the text in the text box.</p>
-                    <p>To undo typed text, select “Ctrl+Z” on your keyboard. <br></br>To redo typed text, select “Ctrl+Y” on your keyboard.</p>
-                    <p>When you are ready to submit the changes your entry, click the “Submit” button.</p>
-                </div>
-                <form onSubmit={handleSubmit}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td style={{ border: "none" }}><input className="InputDate DateBox" value={date} readOnly /></td>
-                            </tr>
-                            <tr>
-                                {/* Mood tag dropdown */}
-                                <td style={{ border: "none" }}>
-                                    <select value={mood} onChange={e => setMood(e.target.value)}>
-                                        <option value="none">none</option>
-                                        <option value="happy">happy</option>
-                                        <option value="neutral">neutral</option>
-                                        <option value="sad">sad</option>
-                                        <option value="angry">angry</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style={{ background: "transparent", border: "none" }}><textarea className="TextBox InputText" value={text} onChange={e => setText(e.target.value)} placeholder="Input text here..." required /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button type="submit">Submit</button>
-                </form >
-            </div>
-        </>
+  // Window popup for leaving without submitting
+  const handleClick = (event) => {
+    let LeaveConfirmed = window.confirm(
+      "Are you sure you want to leave this page? Clicking “OK” will undo changes made to this entry."
     );
+    if (LeaveConfirmed) {
+    } else {
+      event.preventDefault();
+    }
+  };
+
+  // Handle entry submission, confirm window popup
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let SubmitConfirmed = window.confirm(
+      'Are you ready to submit your changes to this entry? Click "OK" or "Cancel".'
+    );
+    if (SubmitConfirmed) {
+      // Date is not updated at edit, mood can be updated
+      const updatedEntry = { text, mood };
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/entries/${id}?user=${user.user}`,
+          {
+            method: "PUT",
+            body: JSON.stringify(updatedEntry),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (response.status === 200) {
+          navigate("/history");
+        } else {
+          alert(
+            `ERROR: Failed to update entry! Status code: ${response.status}`
+          );
+        }
+      } catch (err) {
+        alert(`ERROR: ${err.message}`);
+      }
+    }
+  };
+
+  return (
+    <>
+      <PageTitle title="Edit Entry" onClick={handleClick} />
+      <div className="content">
+        <div className="p-container content">
+          <p>Edit the text in the text box.</p>
+          <p>
+            To undo typed text, select “Ctrl+Z” on your keyboard. <br></br>To
+            redo typed text, select “Ctrl+Y” on your keyboard.
+          </p>
+          <p>
+            When you are ready to submit the changes your entry, click the
+            “Submit” button.
+          </p>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <table>
+            <tbody>
+              <tr>
+                <td style={{ border: "none" }}>
+                  <input className="InputDate DateBox" value={date} readOnly />
+                </td>
+              </tr>
+              <tr>
+                {/* Mood tag dropdown */}
+                <td style={{ border: "none" }}>
+                  <select
+                    value={mood}
+                    onChange={(e) => setMood(e.target.value)}
+                  >
+                    <option value="none">none</option>
+                    <option value="happy">happy</option>
+                    <option value="neutral">neutral</option>
+                    <option value="sad">sad</option>
+                    <option value="angry">angry</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td style={{ background: "transparent", border: "none" }}>
+                  <textarea
+                    className="TextBox InputText"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Input text here..."
+                    required
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </>
+  );
 }
 
 export default EditEntryPage;
